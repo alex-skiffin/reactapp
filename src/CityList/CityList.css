@@ -1,0 +1,33 @@
+.City {
+    position: relative;
+    display: flex;
+    margin: 5px;
+}
+.City-list {
+    margin: 10px;
+    border: none;
+    width: 80%;
+    height: auto;
+    overflow: hidden;
+}
+.City-list ul {
+    list-style-type: none;
+    border: 2px;
+    text-align: left;
+}
+.City-list button {
+    right:0;
+    position: absolute;
+}
+.Cities {
+    width: 30%;
+    margin-top: 10px;
+    border: 1px black;
+}
+.City-buttons {
+    left:35em;
+}
+.City-buttons button{
+    left:20%;
+    margin: 0 5px;
+}
