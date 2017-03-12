@@ -1,42 +1,17 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import './CityList.css';
 
 class CityList extends Component {
-    getDefaultLocation() {
-        return ['Moscow'];
-    }
-
-    addLocation(location) {
-        if (location && !this.state.cityList.includes(location))
-            this.state.cityList.push(location);
-    }
-
-    getLocations() {
-        if (typeof (Storage) === 'undefined')
-            return this.getDefaultLocation();
-
-        let locations = localStorage.getItem('locations');
-        let locationsJson = JSON.parse(locations);
-        if (!locationsJson)
-            locationsJson = this.getDefaultLocation();
-
-        localStorage.setItem('locations', JSON.stringify(locationsJson));
-
-        return locationsJson;
-    }
     constructor(props) {
         super(props);
-        this.state = { cityList: this.getLocations(), inputValue: '' };
-        this.handleCityChange = this.handleCityChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
-        this.addLocation = this.addLocation.bind(this);
+        this.state = { inputValue: '' };
     }
 
     handleSubmit(event) {
         event.preventDefault();
-        this.addLocation(this.state.inputValue);
+        this.props.onAddCity(this.state.inputValue);
         this.setState({ inputValue: '' });
-        localStorage.setItem('locations', JSON.stringify(this.state.cityList));
     }
 
     handleCityChange(event) {
@@ -44,27 +19,27 @@ class CityList extends Component {
     }
 
     deleteElement(element) {
-        if (this.state.cityList.indexOf(element) !== -1)
-            this.state.cityList.splice(this.state.cityList.indexOf(element), 1);
-        localStorage.setItem('locations', JSON.stringify(this.state.cityList));
+        this.props.onDeleteCity(element);
         this.forceUpdate();
+    }
+    selectElement(element) {
     }
 
     render() {
         return (
             <div className="Cities">
-                <form className="City-buttons" onSubmit={this.handleSubmit}>
+                <form className="City-buttons" onSubmit={this.handleSubmit.bind(this)}>
                     <input type="text"
                         placeholder="city"
                         value={this.state.inputValue}
-                        onChange={this.handleCityChange} />
+                        onChange={this.handleCityChange.bind(this)} />
                     <button>Add</button>
                 </form>
                 <div className="City-list">
-                    <ul>{this.state.cityList.map(title =>
-                        <div key={title+'_div'} className="City">
-                            <li key={title+'_li'}>{title}</li>
-                            <button key={title+'_button'} onClick={this.deleteElement.bind(this, title)}>X</button>
+                    <ul>{this.props.cityStore.map(title =>
+                        <div key={title + '_div'} className="City">
+                            <li key={title + '_li'} onClick={this.selectElement.bind(this, title)}>{title}</li>
+                            <button key={title + '_button'} onClick={this.deleteElement.bind(this, title)}>X</button>
                         </div>
                     )}
                     </ul>
@@ -74,4 +49,16 @@ class CityList extends Component {
     }
 }
 
-export default CityList;
+export default connect(
+    state => ({
+        cityStore: state
+    }),
+    dispatch => ({
+        onAddCity: (cityName) => {
+            dispatch({ type: 'ADD_CITY', payload: cityName });
+        },
+        onDeleteCity: (cityName) => {
+            dispatch({ type: 'REMOVE_CITY', payload: cityName });
+        }
+    })
+)(CityList);
