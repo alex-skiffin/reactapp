@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import CityList from './CityList/CityList';
+import WeatherView from './WeatherView/WeatherView';
 import './App.css';
 
 class App extends Component {
@@ -12,6 +13,7 @@ class App extends Component {
         <div className="cities">
           <CityList />
         </div>
+        <WeatherView />
       </div>
     );
   }
