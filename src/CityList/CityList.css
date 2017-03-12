@@ -31,3 +31,6 @@
     left:20%;
     margin: 0 5px;
 }
+.selected {
+    background-color: cornflowerblue;
+}

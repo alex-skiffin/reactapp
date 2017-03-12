@@ -23,9 +23,16 @@ class CityList extends Component {
         this.forceUpdate();
     }
     selectElement(element) {
+        this.setState({ selectedElement: element });
     }
 
     render() {
+        const getBackGround = (element) => {
+            if (this.state.selectedElement === element)
+                return 'selected';
+            else
+                return '';
+        }
         return (
             <div className="Cities">
                 <form className="City-buttons" onSubmit={this.handleSubmit.bind(this)}>
@@ -37,8 +44,8 @@ class CityList extends Component {
                 </form>
                 <div className="City-list">
                     <ul>{this.props.cityStore.map(title =>
-                        <div key={title + '_div'} className="City">
-                            <li key={title + '_li'} onClick={this.selectElement.bind(this, title)}>{title}</li>
+                        <div key={title + '_div'} className="City" >
+                            <li key={title + '_li'} className={getBackGround(title)} onClick={this.selectElement.bind(this, title)}>{title}</li>
                             <button key={title + '_button'} onClick={this.deleteElement.bind(this, title)}>X</button>
                         </div>
                     )}
