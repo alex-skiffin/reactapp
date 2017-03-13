@@ -23,6 +23,7 @@ class CityList extends Component {
         this.forceUpdate();
     }
     selectElement(element) {
+        this.props.onSelectCity(element);
         this.setState({ selectedElement: element });
     }
 
@@ -43,7 +44,7 @@ class CityList extends Component {
                     <button>Add</button>
                 </form>
                 <div className="City-list">
-                    <ul>{this.props.cityStore.map(title =>
+                    <ul>{this.props.localState.locations.map(title =>
                         <div key={title + '_div'} className="City" >
                             <li key={title + '_li'} className={getBackGround(title)} onClick={this.selectElement.bind(this, title)}>{title}</li>
                             <button key={title + '_button'} onClick={this.deleteElement.bind(this, title)}>X</button>
@@ -58,7 +59,7 @@ class CityList extends Component {
 
 export default connect(
     state => ({
-        cityStore: state
+        localState: state
     }),
     dispatch => ({
         onAddCity: (cityName) => {
@@ -66,6 +67,9 @@ export default connect(
         },
         onDeleteCity: (cityName) => {
             dispatch({ type: 'REMOVE_CITY', payload: cityName });
+        },
+        onSelectCity: (cityName) => {
+            dispatch({ type: 'SELECT_CITY', payload: cityName })
         }
     })
 )(CityList);
