@@ -8,23 +8,30 @@ class WeatherView extends Component {
         super(props);
         this.state = { selectedCity: '', weatherJson: '' };
         store.subscribe(this.handleChange.bind(this));
+        if (navigator.geolocation)
+            navigator.geolocation.getCurrentPosition(this.showPosition.bind(this));
+    }
+    showPosition(position) {
+        this.setState({ selectedCity: position.coords.latitude + '  ' + position.coords.longitude });
+        let myRequest = new Request('http://api.openweathermap.org/data/2.5/weather?lat=' + position.coords.latitude + '&lon=' + position.coords.longitude + '&APPID=feb41e28004c532f9bb0ae9e5affc08a');
+        this.getSelectedCityWeather(myRequest);
     }
     handleChange() {
-        this.setSelectedCity(this.props.localState.selectedCity);
+        this.setState({ selectedCity: this.props.localState.selectedCity });
+        let req = new Request('http://api.openweathermap.org/data/2.5/weather?q=' + this.props.localState.selectedCity + '&APPID=feb41e28004c532f9bb0ae9e5affc08a');
+        this.getSelectedCityWeather(req);
     }
-    setSelectedCity(city) {
-        this.setState({ selectedCity: city });
-        let myRequest = new Request('http://api.openweathermap.org/data/2.5/weather?q=' + city + '&APPID=');
-        let req = fetch(myRequest)
+    getSelectedCityWeather(request) {
+        let req = fetch(request)
             .then(function (response) {
                 if (response.status === 200)
-                    return response.json();//this.setState({ weatherJson: response.json() });
+                    return response.json();
             })
             .catch(function (error) {
                 console.error(error);
             });
         req.then((bd) => {
-            this.setState({ weatherJson: JSON.stringify(bd.weather) });
+            this.setState({ weatherJson: JSON.stringify(bd) });
         });
     }
     render() {
