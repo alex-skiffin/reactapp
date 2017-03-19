@@ -1,14 +1,14 @@
 const getLocations = () => {
     if (typeof (Storage) === 'undefined')
-        return ['Moscow'];
+        return { 'locations': ['Moscow'] };
 
-    let locations = localStorage.getItem('locations');
+    let locations = localStorage.getItem('weatherapp_storage');
     let locationsJson = JSON.parse(locations);
     if (!locationsJson)
-        locationsJson = ['Moscow'];
+        locationsJson = { 'locations': ['Moscow'] };
 
-    localStorage.setItem('locations', JSON.stringify(locationsJson));
+    localStorage.setItem('weatherapp_storage', JSON.stringify(locationsJson));
 
-    return locationsJson;
+    return locationsJson.locations;
 }
 export default getLocations;
