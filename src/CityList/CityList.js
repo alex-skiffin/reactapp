@@ -46,8 +46,8 @@ class CityList extends Component {
                 <div className="City-list">
                     <ul>{this.props.localState.locations.map(title =>
                         <div key={title + '_div'} className="City" >
-                            <li key={title + '_li'} className={getBackGround(title)} onClick={this.selectElement.bind(this, title)}>{title}</li>
-                            <button key={title + '_button'} onClick={this.deleteElement.bind(this, title)}>X</button>
+                            <li className={getBackGround(title)} onClick={this.selectElement.bind(this, title)}>{title}</li>
+                            <button onClick={this.deleteElement.bind(this, title)}>X</button>
                         </div>
                     )}
                     </ul>
